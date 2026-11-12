@@ -11,18 +11,40 @@ const config = {
 const game = new Phaser.Game(config);
 
 function create() {
-    // 1. 도화지 깔고 물감 묻히기 (순서 1)
+   
     const g = this.add.graphics();
-    g.fillStyle(0xffffff, 1); // 흰색(0xffffff), 알파값 1 (불투명)
+
+    g.fillStyle(0xffffff, 1);
     
-    // 2. 그림 그리고 굽기 (순서 2)
-    g.fillCircle(16, 16, 16); // 중심(16,16), 반지름 16
-    g.generateTexture('Cir', 32, 32); // 지름에 맞춰서 도화지 크기는 32x32로 여유 있게!
-    
-    // 3. 쓸모없어진 도화지 소각 (순서 3)
+    g.fillCircle(16, 16, 16); 
+    g.generateTexture('Cir', 32, 32); 
+
+    g.clear();
+
+
+    g.lineStyle(2, 0xFFFFFF , 1.0);
+    g.fillStyle(0xFFFFFF, 1.0);
+    g.beginPath();
+    g.moveTo(0,0)
+    g.lineTo(32,0)
+    g.lineTo(32,32)
+    g.lineTo(0,32)
+    g.closePath();
+    g.fillPath();
+    g.generateTexture('Square', 32, 32);
+
     g.destroy();
-    
-    // 4. 이제 글로벌 창고에 'Cir'이 존재하니, 맵 중앙에 소환! (순서 4)
-    const won = this.add.sprite(400, 400, 'Cir');
+
+    const won = this.add.sprite(400, 400, 'Square');
     won.setOrigin(0.5, 0.5);
+
+    this.tweens.add({
+    targets: won,
+    y: 200,                 // Y좌표 200(위쪽)으로 이동해라
+    scale: 2,               // 크기는 2배로 뻥튀기!
+    duration: 1000,         // 이 모든 동작을 1초(1000ms) 만에 끝내라!
+    ease: 'Cubic.easeInOut',
+    yoyo: true,             // 끝까지 가면 다시 원래 상태(되감기)로 돌아와라!
+    repeat: -1              // -1은 '무한 반복'을 의미함
+});
 }
